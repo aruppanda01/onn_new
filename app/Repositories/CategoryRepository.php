@@ -22,11 +22,16 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
         parent::__construct($model);
         $this->model = $model;
     }
-    public function getAllCategory()
+
+     /**
+     * @param string $order
+     * @param string $sort
+     * @param array $columns
+     * @return mixed
+     */
+    public function getAllCategory(string $order = 'id', string $sort = 'desc', array $columns = ['*'])
     {
-        $data = array();
-        $data['categories'] = Category::latest()->get();
-        return view('admin.category.index')->with($data);
+        return $this->all($columns, $order, $sort);
     }
 
     /**
@@ -43,6 +48,19 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
             throw new ModelNotFoundException($e);
         }
     }
+    /**
+     * @param int $id
+     * @return true or false
+     */
+    public function checkExistingCategoryByName(string $name)
+    {
+        $check_category_name = Category::where('name',$name)->first();
+        if ($check_category_name->count() > 0) {
+            return 1;
+        }else{
+            return 0;
+        }
+    }
 
     /**
      * @param array $params
@@ -51,18 +69,24 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
     public function createCategory(array $categoryDetails)
     {
         try{
+
             $collection = collect($categoryDetails);
-            $image = $collection['image'];
-            $imageName = imageUpload($image,'category');
+            $check_category_name = $this->checkExistingCategoryByName($collection['name']);
+            if ($check_category_name == 1) {
+                return 0;
+            }else{
+                $image = $collection['image'];
+                $imageName = imageUpload($image,'category');
 
-            $category = new Category();
-            $category->name = $collection['name'];
-            $category->image_path = $imageName;
-            $category->slug = Str::slug($collection['name']);
-            $category->status = 1;
-            $category->save();
+                $category = new Category();
+                $category->name = $collection['name'];
+                $category->image_path = $imageName;
+                $category->slug = Str::slug($collection['name']);
+                $category->status = 1;
+                $category->save();
 
-            return $category;
+                return $category;
+            }
         }
         catch (QueryException $exception) {
             throw new InvalidArgumentException($exception->getMessage());

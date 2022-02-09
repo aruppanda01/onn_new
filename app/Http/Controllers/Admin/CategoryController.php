@@ -25,7 +25,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return $this->categoryRepository->getAllCategory();
+        $data = array();
+        $data['categories'] = $this->categoryRepository->getAllCategory();
+        return view('admin.category.index')->with($data);
     }
 
     /**
