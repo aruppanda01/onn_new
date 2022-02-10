@@ -42,7 +42,8 @@ class ProductController extends Controller
     {
         $data = array();
         $data['categories'] = $this->product_repository->getAllCategory();
-        $data['sub_categories'] = $this->product_repository->getAllSubCategory();
+        $data['available_ranges'] = $this->product_repository->getAllRange();
+        $data['available_colors'] = $this->product_repository->getAllColor();
         $data['available_product_sizes'] = $this->product_repository->getAllProductSizes();
         return view('admin.product.create')->with($data);
     }

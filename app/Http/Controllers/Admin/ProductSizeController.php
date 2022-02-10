@@ -44,7 +44,8 @@ class ProductSizeController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'size' => 'required|max:255|unique:product_sizes'
+            'size' => 'required|max:255|unique:product_sizes',
+            'short_name' => 'required|max:255',
         ]);
 
         $params = $request->except('_token');
@@ -92,13 +93,17 @@ class ProductSizeController extends Controller
     {
         $this->validate($request,[
             'size' => 'required|max:255',
+            'short_name' => 'required|max:255',
             'status' => 'required'
         ]);
 
-        $update_size = ProductSize::find($id);
-        $update_size->size = $request->size;
-        $update_size->status = $request->status;
-        $update_size->save();
+        $size_details = $request->except('_token');
+
+        $product_size = $this->product_size_repository->updateProductSize($size_details);
+
+        if (!$product_size) {
+            return $this->responseRedirectBack('Error occurred while updating product_size.', 'error', true, true);
+        }
 
         return redirect()->route('admin.available-product-size.index')->with('success','Product Size updated');
     }

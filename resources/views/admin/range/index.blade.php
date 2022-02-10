@@ -11,7 +11,7 @@
                     <ul class="breadcrumb p-0">
                         <li><a href="{{ route('admin.dashboard') }}">Home</a></li>
                         <li class="text-white"><i class="fa fa-chevron-right"></i></li>
-                        <li><a href="#" class="active">Available Product Sizes List</a></li>
+                        <li><a href="#" class="active">All Range List</a></li>
 
                     </ul>
                 </div>
@@ -20,8 +20,8 @@
             <hr>
             <div class="dashboard-body-content">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5>Available Product Sizes List</h5>
-                    <a href="{{ route('admin.available-product-size.create') }}" class="actionbutton btn btn-sm">ADD PRODUCT SIZE</a>
+                    <h5>Range List</h5>
+                    <a href="{{ route('admin.range.create') }}" class="actionbutton btn btn-sm">ADD Range</a>
                 </div>
                 <hr>
                 @if (session('success'))
@@ -33,44 +33,42 @@
                     </div>
                 @endif
                 <div class="table-responsive edit-table">
-                    <table class="table table-sm table-hover" id="product_table">
+                    <table class="table table-sm table-hover" id="category_table">
                         <thead>
                             <tr>
                                 <th>Serial No</th>
-                                <th>Size</th>
-                                <th>Short Name</th>
-                                <th>Status</th>
+                                <th>Name</th>
+                                {{-- <th>Status</th> --}}
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($available_sizes as $index => $avl_size)
-                            <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $avl_size->size }}</td>
-                                <td>{{ $avl_size->short_name }}</td>
-                                <td>
-                                    @if ($avl_size->status == 1)
-                                        <span class="badge badge-primary">Active</span>
-                                    @else
-                                        <span class="badge badge-primary">Pending</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    {{-- <a href="{{ route('admin.product-size.show', $avl_size->id) }}"><i
-                                            class="far fa-eye"></i></a> --}}
-                                    <a href="{{ route('admin.available-product-size.edit', $avl_size->id) }}"
-                                        class="ml-2"><i class="far fa-edit"></i></a>
-                                    {{-- <a href="javascript:void(0);" class="ml-2" data-toggle="modal"
-                                        data-target="#exampleModal" onclick="deleteForm({{ $category->id }})"><i
-                                            class="far fa-trash-alt text-danger"></i></a>
-                                    <form id="delete_form_{{ $category->id }}"
-                                        action="{{ route('admin.category.destroy', $category->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form> --}}
-                                </td>
-                            </tr>
+                            @foreach ($ranges as $index => $range)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ Illuminate\Support\Str::limit($range->name, 20)  }}</td>
+                                    {{-- <td>
+                                        @if ($range->status == 1)
+                                            <span class="badge badge-primary">Active</span>
+                                        @else
+                                            <span class="badge badge-primary">Pending</span>
+                                        @endif
+                                    </td> --}}
+                                    <td>
+                                        <a href="{{ route('admin.range.show', $range->id) }}"><i
+                                                class="far fa-eye"></i></a>
+                                        <a href="{{ route('admin.range.edit', $range->id) }}"
+                                            class="ml-2"><i class="far fa-edit"></i></a>
+                                        {{-- <a href="javascript:void(0);" class="ml-2" data-toggle="modal"
+                                            data-target="#exampleModal" onclick="deleteForm({{ $category->id }})"><i
+                                                class="far fa-trash-alt text-danger"></i></a>
+                                        <form id="delete_form_{{ $category->id }}"
+                                            action="{{ route('admin.category.destroy', $category->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form> --}}
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -80,7 +78,7 @@
     </div>
     <script>
         $(document).ready(function() {
-            $('#product_table').DataTable();
+            $('#category_table').DataTable();
         });
 
         function deleteForm(id) {

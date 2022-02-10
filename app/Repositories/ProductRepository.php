@@ -5,7 +5,9 @@ namespace App\Repositories;
 use App\Interfaces\ProductRepositoryInterface;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductColor;
 use App\Models\ProductSize;
+use App\Models\Range;
 use App\Models\SubCategory;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
@@ -25,9 +27,13 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         parent::__construct($model);
         $this->model = $model;
     }
-    public function getAllSubCategory()
+    public function getAllRange()
     {
-        return SubCategory::where('status',1)->latest()->get();
+        return Range::latest()->get();
+    }
+    public function getAllColor()
+    {
+        return ProductColor::where('status',1)->latest()->get();
     }
     public function getAllCategory()
     {

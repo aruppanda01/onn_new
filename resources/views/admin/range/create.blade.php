@@ -10,37 +10,39 @@
                     <ul class="breadcrumb p-0">
                         <li><a href="{{ route('admin.dashboard') }}">Home</a></li>
                         <li class="text-white"><i class="fa fa-chevron-right"></i></li>
-                        <li><a href="{{ route('admin.available-product-size.index') }}">Available Product Size List</a></li>
+                        <li><a href="{{ route('admin.range.index') }}">All Range List</a></li>
                         <li class="text-white"><i class="fa fa-chevron-right"></i></li>
-                        <li><a href="#" class="active">Add Product Size</a></li>
+                        <li><a href="#" class="active">Add Range</a></li>
                     </ul>
                 </div>
                 @include('admin.layouts.navbar')
             </div>
             <hr>
             <div class="dashboard-body-content">
-                <h5>Add Product Size</h5>
+                <h5>Add Range</h5>
                 <hr>
-                <form action="{{ route('admin.available-product-size.store') }}" method="POST">
+                <form action="{{ route('admin.range.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row m-0 pt-3">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="form-group edit-box">
-                                <label for="review">Size<span class="text-danger">*</span></label>
-                                <input type="text" name="size" class="form-control" id="size"
-                                    value="{{ old('size') }}">
-                                @if ($errors->has('size'))
-                                    <span style="color: red;">{{ $errors->first('size') }}</span>
+                                {{-- <label for="title">Title</label> --}}
+                                <label for="review">Name<span class="text-danger">*</span></label>
+                                <input type="text" name="name" class="form-control" id="name"
+                                    value="{{ old('name') }}">
+                                @if ($errors->has('name'))
+                                    <span style="color: red;">{{ $errors->first('name') }}</span>
                                 @endif
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="form-group edit-box">
-                                <label for="review">Short Name<span class="text-danger">*</span></label>
-                                <input type="text" name="short_name" class="form-control" id="short_name"
-                                    value="{{ old('short_name') }}">
-                                @if ($errors->has('short_name'))
-                                    <span style="color: red;">{{ $errors->first('short_name') }}</span>
+                                {{-- <label for="image">Image</label> --}}
+                                <label for="review">Image<span class="text-danger">*</span></label>
+                                <input type="file" id="image" class="form-control" name="image"
+                                    value="{{ old('image') }}">
+                                @if ($errors->has('image'))
+                                    <span style="color: red;">{{ $errors->first('image') }}</span>
                                 @endif
                             </div>
                         </div>
@@ -52,4 +54,7 @@
             </div>
         </div>
     </div>
+    <script>
+        CKEDITOR.replace('desc');
+    </script>
 @endsection

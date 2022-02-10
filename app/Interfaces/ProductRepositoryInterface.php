@@ -4,7 +4,8 @@ namespace App\Interfaces;
 
 interface ProductRepositoryInterface
 {
-    public function getAllSubCategory();
+    public function getAllRange();
+    public function getAllColor();
     public function getAllCategory();
     public function getAllProductSizes();
     public function getAllProduct();

@@ -11,7 +11,7 @@
                     <ul class="breadcrumb p-0">
                         <li><a href="{{ route('admin.dashboard') }}">Home</a></li>
                         <li class="text-white"><i class="fa fa-chevron-right"></i></li>
-                        <li><a href="#" class="active">Available Product Sizes List</a></li>
+                        <li><a href="#" class="active">Available Product Color List</a></li>
 
                     </ul>
                 </div>
@@ -20,8 +20,8 @@
             <hr>
             <div class="dashboard-body-content">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5>Available Product Sizes List</h5>
-                    <a href="{{ route('admin.available-product-size.create') }}" class="actionbutton btn btn-sm">ADD PRODUCT SIZE</a>
+                    <h5>Available Product Colour List</h5>
+                    <a href="{{ route('admin.available-product-color.create') }}" class="actionbutton btn btn-sm">ADD PRODUCT COLOUR</a>
                 </div>
                 <hr>
                 @if (session('success'))
@@ -37,29 +37,27 @@
                         <thead>
                             <tr>
                                 <th>Serial No</th>
-                                <th>Size</th>
-                                <th>Short Name</th>
+                                <th>Name</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($available_sizes as $index => $avl_size)
+                            @foreach ($colors as $index => $color)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
-                                <td>{{ $avl_size->size }}</td>
-                                <td>{{ $avl_size->short_name }}</td>
+                                <td>{{ $color->name }}</td>
                                 <td>
-                                    @if ($avl_size->status == 1)
+                                    @if ($color->status == 1)
                                         <span class="badge badge-primary">Active</span>
                                     @else
                                         <span class="badge badge-primary">Pending</span>
                                     @endif
                                 </td>
                                 <td>
-                                    {{-- <a href="{{ route('admin.product-size.show', $avl_size->id) }}"><i
+                                    {{-- <a href="{{ route('admin.product-size.show', $color->id) }}"><i
                                             class="far fa-eye"></i></a> --}}
-                                    <a href="{{ route('admin.available-product-size.edit', $avl_size->id) }}"
+                                    <a href="{{ route('admin.available-product-color.edit', $color->id) }}"
                                         class="ml-2"><i class="far fa-edit"></i></a>
                                     {{-- <a href="javascript:void(0);" class="ml-2" data-toggle="modal"
                                         data-target="#exampleModal" onclick="deleteForm({{ $category->id }})"><i

@@ -2,29 +2,33 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\ProductSizeRepositoryInterface;
+use App\Interfaces\ProductColorRepositoryInterface;
 use App\Models\Category;
-use App\Models\ProductSize;
+use App\Models\ProductColor;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use InvalidArgumentException;
 
-class ProductSizeRepository extends BaseRepository implements ProductSizeRepositoryInterface
+class ProductColorRepository extends BaseRepository implements ProductColorRepositoryInterface
 {
     /**
      * CategoryRepository constructor.
      * @param Category $model
      */
-    public function __construct(ProductSize $model)
+    public function __construct(ProductColor $model)
     {
         parent::__construct($model);
         $this->model = $model;
     }
-    public function getAllProductSizes()
+     /**
+     * @param string $order
+     * @param string $sort
+     * @param array $columns
+     * @return mixed
+     */
+    public function getAllProductColor(string $order = 'id', string $sort = 'desc', array $columns = ['*'])
     {
-        $data = array();
-        $data['available_sizes'] = ProductSize::latest()->get();
-        return view('admin.product_size.index')->with($data);
+        return $this->all($columns, $order, $sort);
     }
 
     /**
@@ -32,7 +36,7 @@ class ProductSizeRepository extends BaseRepository implements ProductSizeReposit
      * @return mixed
      * @throws ModelNotFoundException
      */
-    public function findProductSizeById(int $id){
+    public function findProductColorById(int $id){
         try {
             return $this->findOneOrFail($id);
 
@@ -46,14 +50,12 @@ class ProductSizeRepository extends BaseRepository implements ProductSizeReposit
      * @param array $params
      * @return Category|mixed
      */
-    public function createProductSize(array $productSizeDetails)
+    public function createProductColor(array $productSizeDetails)
     {
         try{
             $collection = collect($productSizeDetails);
-
-            $new_size = new ProductSize();
-            $new_size->size = $collection['size'];
-            $new_size->short_name = $collection['short_name'];
+            $new_size = new ProductColor();
+            $new_size->name = $collection['name'];
             $new_size->status = 1;
             $new_size->save();
 
@@ -65,15 +67,14 @@ class ProductSizeRepository extends BaseRepository implements ProductSizeReposit
     }
     /**
      * @param array $params
-     * @return Category|mixed
+     * @return Color|mixed
      */
-    public function updateProductSize(array $productSizeDetails)
+    public function updateProductColor(array $productSizeDetails)
     {
         try{
-                $update_product_size_details = $this->findProductSizeById($productSizeDetails['id']);
+                $update_product_size_details = $this->findProductColorById($productSizeDetails['id']);
 
-                $update_product_size_details->size = $productSizeDetails['size'];
-                $update_product_size_details->short_name = $productSizeDetails['short_name'];
+                $update_product_size_details->name = $productSizeDetails['name'];
                 $update_product_size_details->status = $productSizeDetails['status'];
                 $update_product_size_details->save();
             return $update_product_size_details;

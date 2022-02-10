@@ -14,9 +14,9 @@
                     <i class="fas fa-list-alt"></i>Category
                 </a>
             </li>
-            <li class="{{ Request::is('admin/sub-category*') ? 'active' : '' }}">
-                <a href="{{ route('admin.sub-category.index') }}">
-                    <i class="fas fa-list-alt"></i>Sub Category
+            <li class="{{ Request::is('admin/range*') ? 'active' : '' }}">
+                <a href="{{ route('admin.range.index') }}">
+                    <i class="fas fa-list-alt"></i>Range
                 </a>
             </li>
             <li class="{{ Request::is('admin/product*') ? 'active' : '' }}">
@@ -27,6 +27,11 @@
             <li class="{{ Request::is('admin/available-product-size*') ? 'active' : '' }}">
                 <a href="{{ route('admin.available-product-size.index') }}">
                     <i class="fab fa-product-hunt"></i>Product Sizes
+                </a>
+            </li>
+            <li class="{{ Request::is('admin/available-product-color*') ? 'active' : '' }}">
+                <a href="{{ route('admin.available-product-color.index') }}">
+                    <i class="fab fa-product-hunt"></i>Product Color
                 </a>
             </li>
             <li class="{{ Request::is('admin/image*') ? 'active' : '' }}">
