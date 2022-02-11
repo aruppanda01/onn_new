@@ -7,6 +7,7 @@ use App\Interfaces\ProductRepositoryInterface;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductSize;
+use App\Models\ProductVariant;
 use App\Models\SubCategory;
 use Exception;
 use Illuminate\Http\Request;
@@ -58,11 +59,11 @@ class ProductController extends Controller
     {
         $this->validate($request,[
             'name' => 'required|string|max:255|unique:products',
+            'product_code' => 'required|string|max:255|unique:products',
             'category' => 'required',
-            'sub_category' => 'required',
-            'available_sizes' => 'nullable',
-            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
-            'image' => 'nullable|mimes:png,jpg,jpeg',
+            'range' => 'required',
+            'color' => 'required',
+            'image' => 'required|mimes:png,jpg,jpeg',
             'description' => 'required|max:700'
         ]);
 
@@ -99,8 +100,10 @@ class ProductController extends Controller
     {
         $data = array();
         $data['product_details'] = $this->product_repository->findProductById($id);
+        $data['product_variant_details'] = $this->product_repository->findProductVariantById($id);
         $data['categories'] = $this->product_repository->getAllCategory();
-        $data['sub_categories'] = $this->product_repository->getAllSubCategory();
+        $data['available_colors'] = $this->product_repository->getAllColor();
+        $data['available_ranges'] = $this->product_repository->getAllRange();
         $data['available_product_sizes'] = $this->product_repository->getAllProductSizes();
         return view('admin.product.edit')->with($data);
     }
@@ -116,10 +119,10 @@ class ProductController extends Controller
     {
         $this->validate($request,[
             'name' => 'required|string|max:255',
+            'product_code' => 'required|string|max:255',
             'category' => 'required',
-            'sub_category' => 'required',
-            'available_sizes' => 'nullable',
-            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'range' => 'required',
+            'color' => 'required',
             'image' => 'nullable|mimes:png,jpg,jpeg',
             'description' => 'required|max:700'
         ]);

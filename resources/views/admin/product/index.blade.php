@@ -39,8 +39,7 @@
                                 <th>Serial No</th>
                                 <th>Name</th>
                                 <th>Category</th>
-                                <th>Sub Category</th>
-                                <th>Price(INR)</th>
+                                <th>Range</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -51,8 +50,7 @@
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ Illuminate\Support\Str::limit($product->name, 20)  }}</td>
                                 <td>{{ $product->category->name }}</td>
-                                <td>{{ $product->sub_category->name }}</td>
-                                <td>{{ $product->price }}</td>
+                                <td>{{ $product->range->name }}</td>
                                 <td>
                                     @if ($product->status == 1)
                                         <span class="badge badge-primary">Active</span>

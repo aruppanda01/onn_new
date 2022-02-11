@@ -10,6 +10,7 @@ interface ProductRepositoryInterface
     public function getAllProductSizes();
     public function getAllProduct();
     public function findProductById(int $id);
+    public function findProductVariantById(int $id);
     public function createProduct(array $productDetails);
     public function updateProduct(array $productDetails);
 }

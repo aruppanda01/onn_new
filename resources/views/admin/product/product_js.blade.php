@@ -22,28 +22,6 @@
 
         for (var i = 0; i < inputs.length; ++i) {
             let input_value = inputs[i].value;
-            if (inputs[i].type === 'text') {
-                if (inputs[i].value === '') {
-                    if (k == 0) {
-                        setTimeout(() => {
-                            $('.color_err').text('');
-                        }, 5000);
-                        $('.color_err').text('Colour filed can\'t be blank');
-                    } else {
-                        setTimeout(() => {
-                            $('.color_err' + (k)).text('');
-                        }, 5000);
-                        $('.color_err' + (k)).text('Colour filed can\'t be blank');
-                    }
-                    errorFlagOne = 1;
-                }
-                if (inputs[i].length > 500) {
-                    setTimeout(() => {
-                        $('.textarea_error').text('You can add a color within 255 characters');
-                    }, 5000);
-                    errorFlagOne = 1;
-                }
-            }
             if (inputs[i].type === 'number') {
                 if (inputs[i].value === '') {
                     if (k == 0) {
@@ -84,27 +62,19 @@
             return false;
         } else {
             $("#add_multiple_varient").append(`<hr>
-                <div class="col-lg-4">
+                <div class="col-lg-5">
                     <div class="form-group edit-box">
                         <label for="review">Available Sizes<span class="text-danger">*</span></label>
                         <select class="form-control" name="addMoreInputFields[${i}][sizes]">
                             <option value="">Select Size</option>
                             @foreach ($available_product_sizes as $avl_size)
-                                <option value="{{ $avl_size->size }}">{{ $avl_size->size }}</option>
+                                <option value="{{ $avl_size->id }}">{{ $avl_size->size }}</option>
                             @endforeach
                         </select>
                         <span class="text-danger size_err${i}"></span>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="form-group edit-box">
-                        <label for="review">Colour<span class="text-danger">*</span></label>
-                        <input type="text" id="colors" class="form-control" name="addMoreInputFields[${i}][colors]"
-                            value="{{ old('colors') }}" min="1">
-                        <span class="text-danger color_err${i}"></span>
-                    </div>
-                </div>
-                <div class="col-lg-4">
+                <div class="col-lg-5">
                     <div class="form-group edit-box">
                         <label for="review">Price<span class="text-danger">*</span></label>
                         <input type="number" id="price" class="form-control" name="addMoreInputFields[${i}][price]"
