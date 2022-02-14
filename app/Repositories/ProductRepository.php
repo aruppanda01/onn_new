@@ -46,9 +46,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     }
     public function getAllProduct()
     {
-        $data = array();
-        $data['products'] = Product::latest()->get();
-        return view('admin.product.index')->with($data);
+        return Product::latest()->get();
     }
 
     /**
@@ -96,10 +94,10 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             $new_product = new Product();
 
             // Available Color
-            $available_color = $collection['color'];
-            if ($available_color) {
-                $new_product->color_ids = implode(',', $available_color);
-            }
+            // $available_color = $collection['color'];
+            // if ($available_color) {
+            //     $new_product->color_ids = implode(',', $available_color);
+            // }
 
             $new_product->name = $collection['name'];
             $new_product->product_code = $collection['product_code'];
@@ -112,17 +110,17 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             $new_product->save();
 
             // Store product variant
-            foreach ($collection['addMoreInputFields'] as $key => $input_field) {
-                $request_sizes = $input_field['sizes'];
-                $request_price = $input_field['price'];
+            // foreach ($collection['addMoreInputFields'] as $key => $input_field) {
+            //     $request_sizes = $input_field['sizes'];
+            //     $request_price = $input_field['price'];
 
-                $new_product_variant = new ProductVariant();
-                $new_product_variant->product_id = $new_product->id;
-                $new_product_variant->size_id =  $request_sizes;
-                $new_product_variant->price =  $request_price;
-                $new_product_variant->save();
+            //     $new_product_variant = new ProductVariant();
+            //     $new_product_variant->product_id = $new_product->id;
+            //     $new_product_variant->size_id =  $request_sizes;
+            //     $new_product_variant->price =  $request_price;
+            //     $new_product_variant->save();
 
-            }
+            // }
 
             return $new_product;
         }

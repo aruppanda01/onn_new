@@ -1,24 +1,24 @@
 <script>
     $(document).ready(function () {
+        $('#product_table').DataTable();
+        var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
+            removeItemButton: true,
 
-    var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
-        removeItemButton: true,
-
+        });
     });
-});
     CKEDITOR.replace('description');
     /*
-        It's usesd to validate  product varient
+        It's used to validate  product variant
         Like different size, different color and different price
     */
     var i = 0;
     var k = 0;
-    $('#add_varient').on('click', function(e) {
+    $('#add_variant').on('click', function(e) {
 
         // start
         var errorFlagOne = 0;
-        var inputs = document.getElementById('add_multiple_varient').getElementsByTagName('input');
-        var selectInputs = document.getElementById('add_multiple_varient').getElementsByTagName('select');
+        var inputs = document.getElementById('add_multiple_variant').getElementsByTagName('input');
+        var selectInputs = document.getElementById('add_multiple_variant').getElementsByTagName('select');
 
         for (var i = 0; i < inputs.length; ++i) {
             let input_value = inputs[i].value;
@@ -61,7 +61,7 @@
         if (errorFlagOne == 1) {
             return false;
         } else {
-            $("#add_multiple_varient").append(`<hr>
+            $("#add_multiple_variant").append(`<hr>
                 <div class="col-lg-5">
                     <div class="form-group edit-box">
                         <label for="review">Available Sizes<span class="text-danger">*</span></label>
@@ -74,12 +74,40 @@
                         <span class="text-danger size_err${i}"></span>
                     </div>
                 </div>
-                <div class="col-lg-5">
+                <div class="col-lg-4">
                     <div class="form-group edit-box">
-                        <label for="review">Price<span class="text-danger">*</span></label>
-                        <input type="number" id="price" class="form-control" name="addMoreInputFields[${i}][price]"
-                            value="{{ old('price') }}" min="1">
-                        <span class="text-danger price_err${i}"></span>
+                        <label for="review">Product Colour<span class="text-danger">*</span></label>
+                        <select class="form-control" name="addMoreInputFields[${i}][color]">
+                            @foreach($available_colors as $color)
+                                    <option value="{{ $color->id }}">{{ $color->name }} </option>
+                            @endforeach
+
+                        </select>
+                        <span class="text-danger color_err${i}"></span>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group edit-box">
+                        <label for="review">MRP<span class="text-danger">*</span></label>
+                        <input type="number" id="mrp" class="form-control"
+                            name="addMoreInputFields[${i}][mrp]" value="{{ old('mrp') }}" min="1">
+                        <span class="text-danger mrp_err"></span>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group edit-box">
+                        <label for="review">Discount(%)<span class="text-danger">*</span></label>
+                        <input type="number" id="discount" class="form-control"
+                            name="addMoreInputFields[${i}][discount]" value="{{ old('discount') }}" min="1">
+                        <span class="text-danger discount_err"></span>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group edit-box">
+                        <label for="review">FInal Price<span class="text-danger">*</span></label>
+                        <input type="number" id="price" class="form-control"
+                            name="addMoreInputFields[${i}][price]" value="{{ old('price') }}" min="1">
+                        <span class="text-danger price_err"></span>
                     </div>
                 </div>
             `);
@@ -89,7 +117,7 @@
     });
 
     /*
-        It's usesd to store  product varient
+        It's used to store  product variant
         Like different size, different color and different price
     */
     $('#btn_submit').on('click',function(e) {
@@ -187,5 +215,46 @@
             }
         })
     });
+
+    /*
+        For Delete a product
+    */
+    function deleteForm(id) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.preventDefault();
+                    document.getElementById('delete_form_' + id).submit();
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your data  is safe :)',
+                        'error'
+                    )
+                }
+            })
+        }
+
+        setTimeout(function() {
+            $(".alert-success").hide();
+        }, 5000);
 
 </script>

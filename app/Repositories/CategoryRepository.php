@@ -55,7 +55,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
     public function checkExistingCategoryByName(string $name)
     {
         $check_category_name = Category::where('name',$name)->first();
-        if ($check_category_name->count() > 0) {
+        if (!empty($check_category_name)) {
             return 1;
         }else{
             return 0;

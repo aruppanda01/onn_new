@@ -30,8 +30,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-
-        return $this->product_repository->getAllProduct();
+        $data = array();
+        $data['products'] = $this->product_repository->getAllProduct();
+        $data['available_colors'] = $this->product_repository->getAllColor();
+        $data['available_product_sizes'] = $this->product_repository->getAllProductSizes();
+        return view('admin.product.index')->with($data);
     }
 
     /**
@@ -62,7 +65,7 @@ class ProductController extends Controller
             'product_code' => 'required|string|max:255|unique:products',
             'category' => 'required',
             'range' => 'required',
-            'color' => 'required',
+            // 'color' => 'required',
             'image' => 'required|mimes:png,jpg,jpeg',
             'description' => 'required|max:700'
         ]);
@@ -147,5 +150,18 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Add product variant
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+
+    public function addVariant(Request $request)
+    {
+        dd($request->all());
+
     }
 }

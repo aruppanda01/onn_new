@@ -35,6 +35,7 @@ Route::group(['middleware' => ['auth','admin']], function () {
      */
     Route::resource('product',ProductController::class);
     Route::resource('available-product-size',ProductSizeController::class);
+    Route::post('add-product',[ProductController::class,'addVariant'])->name('addVariant');
 
     /**
      * Image Management
