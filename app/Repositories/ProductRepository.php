@@ -65,13 +65,27 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     }
 
     /**
-     * @param int $id
+     * @param int product $id
      * @return mixed
      * @throws ModelNotFoundException
      */
     public function findProductVariantById(int $id){
         try {
             return ProductVariant::where('product_id',$id)->get();
+
+        } catch (ModelNotFoundException $e) {
+
+            throw new ModelNotFoundException($e);
+        }
+    }
+    /**
+     * @param int product $id
+     * @return mixed
+     * @throws ModelNotFoundException
+     */
+    public function findProductVariantByVariantId(int $id){
+        try {
+            return ProductVariant::find($id);
 
         } catch (ModelNotFoundException $e) {
 
@@ -144,12 +158,6 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
                     $imageName = $update_product_details['image_path'];
                 }
 
-                // Available Color
-                $available_color = $productDetails['color'];
-                if ($available_color) {
-                    $update_product_details->color_ids = implode(',', $available_color);
-                }
-
                 $update_product_details->name = $productDetails['name'];
                 $update_product_details->product_code = $productDetails['product_code'];
                 $update_product_details->image_path = $imageName;
@@ -158,41 +166,96 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
                 $update_product_details->range_id = $productDetails['range'];
                 $update_product_details->description = $productDetails['description'];
                 $update_product_details->status = 1;
-                // $update_product_details->save();
-
-                // Store product variant
-                foreach ($productDetails['addMoreInputFields'] as $key => $input_field) {
-                    foreach ($input_field as $field) {
-                        dd($field);
-                        $request_sizes = $field['sizes'];
-                        $request_price = $field['price'];
-
-                        $update_product_variant = $this->findProductVariantById($productDetails['id']);
-                        $update_product_variant->size_id =  $request_sizes;
-                        $update_product_variant->price =  $request_price;
-                        // $update_product_variant->save();
-                    }
-
-                }
-                //
-                 // Available Sizes
-                // $available_sizes = $productDetails['available_sizes'];
-                // if ($available_sizes) {
-                //     $update_product_details->available_sizes = implode(',', $available_sizes);
-                // }
-                // $update_product_details->name = $productDetails['name'];
-                // $update_product_details->category_id = $productDetails['category'];
-                // $update_product_details->sub_category_id = $productDetails['sub_category'];
-                // $update_product_details->description = $productDetails['description'];
-                // $update_product_details->price = $productDetails['price'];
-                // $update_product_details->image_path = $imageName;
-                // $update_product_details->slug = Str::slug($productDetails['name']);
-                // $update_product_details->status = $productDetails['status'];
-                // $update_product_details->save();
+                $update_product_details->save();
 
             return $update_product_details;
         }
         catch (QueryException $exception) {
+            throw new InvalidArgumentException($exception->getMessage());
+        }
+    }
+
+     /**
+     * @param array $params
+     * @return ProductVariant|mixed
+     */
+    public function addVariant(array $variantDetails){
+        try {
+            foreach ($variantDetails['addMoreInputFields'] as $key => $input_field) {
+                    $request_sizes = $input_field['sizes'];
+                    $request_color = $input_field['color'];
+                    $request_mrp = $input_field['mrp'];
+                    $request_discount = $input_field['discount'];
+
+                    /**
+                     * Calculation the actual price
+                     */
+                    $discount_price =  ($request_mrp / 100) * $request_discount;
+                    $final_price = $request_mrp -  $discount_price;
+
+                    /**
+                     * Store the variant details in product_variants table
+                     */
+
+                    $new_product_variant = new ProductVariant();
+                    $new_product_variant->product_id = $variantDetails['product_id'];
+                    $new_product_variant->size_id =  $request_sizes;
+                    $new_product_variant->color_id =  $request_color;
+                    $new_product_variant->mrp =  $request_mrp;
+                    $new_product_variant->discount =  $request_discount;
+                    $new_product_variant->actual_price =  $final_price;
+                    $new_product_variant->save();
+
+            }
+        } catch (QueryException $exception) {
+            throw new InvalidArgumentException($exception->getMessage());
+        }
+    }
+
+    /**
+     * Update variant
+     */
+    public function updateVariant($variantDetails){
+            try{
+                $update_product_variant_details = $this->findProductVariantByVariantId($variantDetails['id']);
+
+                $request_sizes = $variantDetails['sizes'];
+                $request_color = $variantDetails['color'];
+                $request_mrp = $variantDetails['mrp'];
+                $request_discount = $variantDetails['discount'];
+
+                /**
+                 * Calculation the actual price
+                 */
+                $discount_price =  ($request_mrp / 100) * $request_discount;
+                $final_price = $request_mrp -  $discount_price;
+
+                /**
+                 * Store the variant details in product_variants table
+                */
+
+                $update_product_variant_details->size_id =  $request_sizes;
+                $update_product_variant_details->color_id =  $request_color;
+                $update_product_variant_details->mrp =  $request_mrp;
+                $update_product_variant_details->discount =  $request_discount;
+                $update_product_variant_details->actual_price =  $final_price;
+                $update_product_variant_details->save();
+
+            return $update_product_variant_details;
+        }
+        catch (QueryException $exception) {
+            throw new InvalidArgumentException($exception->getMessage());
+        }
+    }
+    /**
+     * Delete variant
+     */
+
+    public function deleteVariant($variantDetails){
+        try {
+            $variant = ProductVariant::find($variantDetails['id'])->delete();
+            return $variant;
+        } catch (QueryException $exception) {
             throw new InvalidArgumentException($exception->getMessage());
         }
     }

@@ -20,6 +20,7 @@
             <hr>
             <div class="dashboard-body-content">
                 <h5>Edit Product</h5>
+                <a href="{{ route('admin.getAllProductVariantById',$product_details->id) }}" class="btn btn-primary float-right">Product Variant</a>
                 <hr>
                 <form action="{{ route('admin.product.update',$product_details->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -75,34 +76,6 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group edit-box">
-                                <label for="review">Available Colour</label>
-                                <?php
-                                //get the old values from form
-                                $old = old('color');
-
-                                //get data from database table field
-                                $ids = explode(',', $product_details->color_ids);
-                                //stay the values after form submission
-                                if ($old) {
-                                    $ids = $old;
-                                }
-                                ?>
-                                <select id="choices-multiple-remove-button" class="form-control" name="color[]" multiple>
-                                    @foreach ($available_colors as $color)
-                                        <option value="{{ $color->id }}" @php
-                                            echo in_array($color->id, $ids) ? 'selected' : '';
-                                        @endphp>
-                                            {{ $color->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('color'))
-                                    <span style="color: red;">{{ $errors->first('color') }}</span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group edit-box">
                                 <label for="review">Status<span class="text-danger">*</span></label>
                                 <select name="status" id="status" class="form-control">
                                     <option value="0" @if ($product_details->status == 0)
@@ -115,43 +88,6 @@
                                 @endif
                             </div>
                         </div>
-                        <!--Start -->
-                        @foreach ($product_variant_details as $key => $item)
-                        <div class="col-lg-12">
-                            <div class="row align-items-center" id="add_multiple_varient">
-                                <div class="col-lg-5">
-                                    <div class="form-group edit-box">
-                                        <input type="hidden" value="{{ $item->id }}" name="addMoreInputFields[0][product_variant_id][]">
-                                        <label for="review">Available Sizes<span class="text-danger">*</span></label>
-                                        <select class="form-control"
-                                            name="addMoreInputFields[0][sizes][]">
-                                            <option value="">Select Size</option>
-                                            @foreach ($available_product_sizes as $avl_size)
-                                                <option value="{{ $avl_size->id }}" @if ($avl_size->id == $item->size_id)
-                                                    selected
-                                                @endif>{{ $avl_size->size }}</option>
-                                            @endforeach
-                                        </select>
-                                        <span class="text-danger size_err"></span>
-                                    </div>
-                                </div>
-                                <div class="col-lg-5">
-                                    <div class="form-group edit-box">
-                                        <label for="review">Price<span class="text-danger">*</span></label>
-                                        <input type="number" id="price" class="form-control"
-                                            name="addMoreInputFields[0][price][]" value="{{ $item->price ?? old('price') }}" min="1">
-                                        <span class="text-danger price_err"></span>
-                                    </div>
-                                </div>
-                                @if ($product_variant_details->keys()->last()  == $key)
-                                    <div class="col-lg-2">
-                                        <button type="button" class="btn btn-primary" id="add_varient"><i class="fa fa-plus"></i> Add</button>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                        @endforeach
-                        <!-- end -->
                         <div class="col-lg-6">
                             <div class="form-group edit-box">
                                 <label for="review">Image<span class="text-danger">*</span></label>

@@ -62,7 +62,7 @@
                                         <span data-toggle="modal" data-target="#examModal" data-id="{{ $product->id }}"
                                             class="add_question_section">
                                             <a href="#"><i class="fa fa-plus mr-2" data-toggle="tooltip"
-                                                    data-placement="top" title="Add Questions"></i></a>
+                                                    data-placement="top" title="Add Variant"></i></a>
                                         </span>
                                         <a href="{{ route('admin.product.show', $product->id) }}"><i
                                                 class="far fa-eye"></i></a>

@@ -125,7 +125,6 @@ class ProductController extends Controller
             'product_code' => 'required|string|max:255',
             'category' => 'required',
             'range' => 'required',
-            'color' => 'required',
             'image' => 'nullable|mimes:png,jpg,jpeg',
             'description' => 'required|max:700'
         ]);
@@ -161,7 +160,82 @@ class ProductController extends Controller
 
     public function addVariant(Request $request)
     {
-        dd($request->all());
+        $product_variant_details = $request->except('_token');
+
+        $product = $this->product_repository->addVariant($product_variant_details);
+        return redirect()->route('admin.product.index')->with('success','Product details updated');
 
     }
+
+    /**
+     * Get All the product variant by product id
+     */
+
+    public function getAllProductVariantById($id){
+        $data = array();
+        $data['product_id'] = $id;
+        $data['product_variant_details'] = $this->product_repository->findProductVariantById($id);
+        return view('admin.product.variant.index')->with($data);
+    }
+
+    /**
+     * Show Variant
+     */
+
+     public function showProductVariantById($id){
+        $data = array();
+        $data['product_id'] = $id;
+        $data['product_variant_details'] = $this->product_repository->findProductVariantById($id);
+        return view('admin.product.variant.view')->with($data);
+     }
+
+    /**
+     * Edit variant
+     */
+
+     public function editVariant($id){
+        $data = array();
+        $data['variant_id'] = $id;
+        $data['available_colors'] = $this->product_repository->getAllColor();
+        $data['available_product_sizes'] = $this->product_repository->getAllProductSizes();
+        $data['product_variant_details'] = $this->product_repository->findProductVariantByVariantId($id);
+        return view('admin.product.variant.edit')->with($data);
+     }
+
+     /**
+      * Update variant
+      * @param  \Illuminate\Http\Request  $request
+      */
+
+      public function updateVariant(Request $request,$id){
+        $this->validate($request,[
+            'sizes' => 'required',
+            'color' => 'required',
+            'mrp' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'discount' => 'required',
+        ]);
+        $product_details = $request->except('_token');
+
+        $product = $this->product_repository->updateVariant($product_details);
+
+        if (!$product) {
+            return $this->responseRedirectBack('Error occurred while updating product.', 'error', true, true);
+        }
+        return redirect()->route('admin.getAllProductVariantById',$product->product_id)->with('success','Product variant updated');
+      }
+
+      /**
+       * Delete variant
+       */
+
+     public function deleteVariant(Request $request,$id){
+        
+        $product_details = $request->except('_token');
+        $product = $this->product_repository->deleteVariant($product_details);
+
+        if (!$product) {
+            return $this->responseRedirectBack('Error occurred while updating product.', 'error', true, true);
+        }
+        return redirect()->back()->with('success','Product variant deleted');
+     }
 }

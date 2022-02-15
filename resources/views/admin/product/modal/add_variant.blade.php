@@ -9,8 +9,9 @@
           </button>
         </div>
         <div class="modal-body">
-          <form action="{{ route('admin.addVariant') }}" method="POST">
+          <form action="{{ route('admin.addVariant') }}" method="POST" class="product-form">
             @csrf
+            <input type="hidden" name="product_id" id="product_id">
           <div class="col-lg-12">
             <div class="row align-items-center" id="add_multiple_variant">
                 <div class="col-lg-4">
@@ -54,21 +55,13 @@
                         <span class="text-danger discount_err"></span>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="form-group edit-box">
-                        <label for="review">FInal Price<span class="text-danger">*</span></label>
-                        <input type="number" id="price" class="form-control"
-                            name="addMoreInputFields[0][price]" value="{{ old('price') }}" min="1">
-                        <span class="text-danger price_err"></span>
-                    </div>
-                </div>
             </div>
         </div>
           
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" id="add_variant"><i class="fa fa-plus"></i> Add</button>
-          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="submit" class="btn btn-primary" id="btn_submit">Save</button>
         </div>
       </form>
       </div>

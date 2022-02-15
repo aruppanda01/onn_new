@@ -35,7 +35,12 @@ Route::group(['middleware' => ['auth','admin']], function () {
      */
     Route::resource('product',ProductController::class);
     Route::resource('available-product-size',ProductSizeController::class);
-    Route::post('add-product',[ProductController::class,'addVariant'])->name('addVariant');
+    Route::post('add-product-variant',[ProductController::class,'addVariant'])->name('addVariant');
+    Route::get('product/edit-product-variant/{id}',[ProductController::class,'editVariant'])->name('editVariant');
+    Route::put('product/update-product-variant/{id}',[ProductController::class,'updateVariant'])->name('updateVariant');
+    Route::delete('product/delete-product-variant/{id}',[ProductController::class,'deleteVariant'])->name('deleteVariant');
+    Route::get('product-variant/{id}',[ProductController::class,'getAllProductVariantById'])->name('getAllProductVariantById');
+    Route::get('product/show-product-variant/{id}',[ProductController::class,'showProductVariantById'])->name('showProductVariantById');
 
     /**
      * Image Management

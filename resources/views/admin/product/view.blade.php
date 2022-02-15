@@ -20,13 +20,20 @@
             <hr>
             <div class="dashboard-body-content">
                 <h5>View Product</h5>
+                <a href="{{ route('admin.showProductVariantById',$product_details->id) }}" class="btn btn-primary float-right">Product Variant</a>
                 <hr>
                     <div class="row m-0 pt-3">
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
                             <div class="form-group edit-box">
                                 <label for="review">Name</label>
                                 <input type="text" name="name" class="form-control" id="name"
                                     value="{{ $product_details->name ?? old('name') }}" disabled>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group edit-box">
+                                <label for="review">Product Code<span class="text-danger">*</span></label>
+                                <input type="text" name="product_code" class="form-control" id="product_code" value="{{ $product_details->product_code ?? old('product_code') }}">
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -37,21 +44,8 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group edit-box">
-                                <label for="review">Sub Category</label>
-                                <input type="text" name="" id="" value="{{ $product_details->sub_category->name }}" class="form-control" disabled>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group edit-box">
-                                <label for="review">Available Sizes </label>
-                                <input type="text" value="{{ $product_details->available_sizes }}" class="form-control" disabled>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group edit-box">
-                                <label for="review">Price</label>
-                                <input type="number" id="price" class="form-control" name="price"
-                                    value="{{ $product_details->price ?? old('price') }}" min="1" disabled>
+                                <label for="review">Range<span class="text-danger">*</span></label>
+                                <input type="text" name="" id="" value="{{ $product_details->range->name }}" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="col-lg-6">
